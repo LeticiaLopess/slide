@@ -25,5 +25,5 @@ img {
   flex-shrink: 0; /* evita que as fotos diminuam para caber uma do lado da outra, aqui criamos um overflow-x */
   width: 80vw; /* 80% da tela */
   max-width: 800px;
-  margin: 20px;
+  margin: 0 20px;
 }

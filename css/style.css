@@ -1,0 +1,33 @@
+body {
+  margin: 0px;
+}
+
+ul {
+  padding: 0px;
+  margin: 0px;
+  list-style: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+.slide-wrapper {
+  overflow-x: hidden;
+}
+
+.slide {
+  display: flex;
+}
+
+.slide li {
+  flex-shrink: 0; /* evita que as fotos diminuam para caber uma do lado da outra, aqui criamos um overflow-x */
+  width: 80vw; /* 80% da tela */
+  max-width: 800px;
+  margin: 20px;
+}
+
+.slide {
+  transform: translate3d(0px, 0px, 0px);
+}

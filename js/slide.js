@@ -139,6 +139,21 @@ export default class Slide {
     this.addSlideEvents();
     this.slidesConfig();
     this.addResizeEvent()
+    this.changeSlide(0)
     return this;
+  }
+}
+
+
+export class SlideNav extends Slide { // posso exportar mais de um sendo que a classe de origem que vai ser o default, padrão
+  addArrow(prev, next) {
+    this.prevElement = document.querySelector(prev);
+    this.nextElement = document.querySelector(next);
+    this.addArrowEvent();
+  }
+
+  addArrowEvent() {
+    this.prevElement.addEventListener('click', this.activePrevSlide)
+    this.nextElement.addEventListener('click', this.activeNextSlide)
   }
 }

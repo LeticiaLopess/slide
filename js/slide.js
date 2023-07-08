@@ -7,7 +7,8 @@ export default class Slide {
     this.slide = document.querySelector(slide)
     this.wrapper = document.querySelector(wrapper)
     this.dist = { finalPosition: 0, startX: 0, movement: 0 }
-    this.activeClass = 'active'
+    this.activeClass = 'active';
+    this.changeEvent = new Event('changeEvent'); // criando um novo evento
   }
 
   transition(active) {
@@ -97,6 +98,8 @@ export default class Slide {
     this.slidesIndexNav(index);
     this.dist.finalPosition = activeSlide.position;
     this.changeActiveClass();
+    this.wrapper.dispatchEvent(this.changeEvent); // função que irá emitir o evento que criamos
+
   }
 
   changeActiveClass() {
@@ -146,6 +149,12 @@ export default class Slide {
 
 
 export class SlideNav extends Slide { // posso exportar mais de um sendo que a classe de origem que vai ser o default, padrão
+  
+  constructor(slide, wrapper) { // ou posso colocar ...args
+    super(slide, wrapper) // lembrando que toda vez que eu estendo uma classe, eu preciso usar o super caso eu use o construtor nessa classe que está estendendo outra, chamando os parâmetros da classe pai
+    this.bindControlEvents()
+  }
+
   addArrow(prev, next) {
     this.prevElement = document.querySelector(prev);
     this.nextElement = document.querySelector(next);
@@ -156,4 +165,41 @@ export class SlideNav extends Slide { // posso exportar mais de um sendo que a c
     this.prevElement.addEventListener('click', this.activePrevSlide)
     this.nextElement.addEventListener('click', this.activeNextSlide)
   }
+
+  createControl() {
+    const control = document.createElement('ul');
+    control.dataset.control = 'slide'; // aqui estamos adicionando um data-atributo, que no fim será: data-slide
+    this.slideArray.forEach((item, index) => {
+      control.innerHTML += `<li><a href="#slide${index + 1}">${index + 1}</a></li>`
+    });
+    this.wrapper.appendChild(control)
+    return control;
+  }
+
+  eventControl(item, index) {
+    item.addEventListener('click', (event) => {
+      event.preventDefault();
+      this.changeSlide(index);
+    })
+    this.wrapper.addEventListener('changeEvent', this.activeControlItem) // aqui eu 'observo' o evento que criamos, toda vez que eventControl for ativado, o nosso evento ativará o método activeControlItem
+  }
+
+  activeControlItem() {
+    this.controlArray.forEach(item => item.classList.remove(this.activeClass))
+    this.controlArray[this.index.active].classList.add(this.activeClass);
+  }
+
+  addControl(customControl) {
+    this.control = document.querySelector('.customControl') || this.createControl(); // se for passado, será customizado, se não, seguirá com o this.createControl de forma padrão;
+    this.controlArray = [...this.control.children]; // com os ..., destructuring, transformamos em array
+    
+    this.activeControlItem();
+    this.controlArray.forEach(this.eventControl); // já vai adicionar pois tem o item e o index no eventControl, que já seriam os parâmetros do forEach, ficaria tipo: .forEach((item, index).this.eventControl(item, index)), mas quando esses parâmetros são iguais, não é necessário colocar
+  }
+
+  bindControlEvents() {
+    this.eventControl = this.eventControl.bind(this)
+    this.activeControlItem = this.activeControlItem.bind(this)
+  }
+
 }

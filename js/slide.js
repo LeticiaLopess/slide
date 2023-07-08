@@ -2,7 +2,7 @@
 
 import debounce from './debounce.js'
 
-export default class Slide {
+export class Slide {
   constructor(slide, wrapper) {
     this.slide = document.querySelector(slide)
     this.wrapper = document.querySelector(wrapper)
@@ -148,7 +148,7 @@ export default class Slide {
 }
 
 
-export class SlideNav extends Slide { // posso exportar mais de um sendo que a classe de origem que vai ser o default, padrão
+export default class SlideNav extends Slide { // posso exportar mais de um sendo que só podemos usar uma como default, como eu deixei essa como default eu tirei o da Slide, quando a classe é dafault não precisamos colocar { } na importação no outro arquivo JS, só se for mais de um ou não default
   
   constructor(slide, wrapper) { // ou posso colocar ...args
     super(slide, wrapper) // lembrando que toda vez que eu estendo uma classe, eu preciso usar o super caso eu use o construtor nessa classe que está estendendo outra, chamando os parâmetros da classe pai
@@ -190,7 +190,7 @@ export class SlideNav extends Slide { // posso exportar mais de um sendo que a c
   }
 
   addControl(customControl) {
-    this.control = document.querySelector('.customControl') || this.createControl(); // se for passado, será customizado, se não, seguirá com o this.createControl de forma padrão;
+    this.control = document.querySelector(customControl) || this.createControl(); // se for passado, será customizado, se não, seguirá com o this.createControl de forma padrão;
     this.controlArray = [...this.control.children]; // com os ..., destructuring, transformamos em array
     
     this.activeControlItem();
